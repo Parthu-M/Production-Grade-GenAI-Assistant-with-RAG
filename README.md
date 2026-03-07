@@ -1,177 +1,268 @@
 # GenAI RAG Chat Assistant 🤖
 
 An AI-powered chatbot built using **Retrieval-Augmented Generation (RAG)** and the **Google Gemini API**.
-This application retrieves relevant information from a knowledge base using **semantic search and embeddings** and then generates accurate responses using a large language model.
+
+The system retrieves relevant knowledge using **semantic search and embeddings** and generates responses using a **Large Language Model (LLM)**.
 
 ---
 
 ## 🚀 Features
 
-* AI-powered question answering
-* Retrieval-Augmented Generation (RAG)
-* Semantic search using embeddings
-* Knowledge base stored in JSON documents
-* Fast similarity search using cosine similarity
-* Interactive chat interface
-* Flask backend with HTML, CSS, and JavaScript frontend
-* Environment variable support for API keys
+- AI-powered question answering  
+- Retrieval-Augmented Generation (RAG)  
+- Semantic search using embeddings  
+- Knowledge base stored in JSON documents  
+- Fast similarity search using cosine similarity  
+- Interactive chat interface  
+- Flask backend  
+- HTML, CSS, JavaScript frontend  
+- Environment variables for API keys  
 
 ---
 
-## 🧠 How It Works
+# 🏗 Architecture
 
-The system follows a **RAG pipeline**:
+System architecture flow:
 
-1. User submits a question through the web interface.
-2. The question is converted into an **embedding vector**.
-3. The system compares it with stored document embeddings using **cosine similarity**.
-4. The most relevant chunks are retrieved.
-5. The retrieved context is sent to the **Gemini LLM**.
-6. The model generates a context-aware answer.
+User  
+↓  
+Web Interface (HTML / CSS / JS)  
+↓  
+Flask Backend API  
+↓  
+Query Embedding Generation  
+↓  
+Vector Similarity Search  
+↓  
+Retrieve Relevant Documents  
+↓  
+Prompt Construction  
+↓  
+Gemini LLM  
+↓  
+Generated Response  
+↓  
+Return Response to User
 
----
-
-## 🏗 Project Structure
-
-```
-genai-chat-assistant/
-│
-├── app.py                # Flask backend
-├── docs.json             # Knowledge base documents
-├── embeddings.json       # Cached document embeddings
-├── requirements.txt      # Python dependencies
-│
-├── static/
-│   ├── script.js         # Frontend logic
-│   └── styles.css        # UI styling
-│
-├── templates/
-│   └── index.html        # Chat interface
-│
-└── .env                  # API key (not uploaded to GitHub)
-```
+This architecture ensures responses are generated using **retrieved knowledge instead of relying only on model training data**.
 
 ---
 
-## ⚙️ Installation
+# 🧠 RAG Workflow
 
-### 1️⃣ Clone the repository
+The chatbot follows a **Retrieval-Augmented Generation pipeline**.
 
-```
-git clone https://github.com/yourusername/genai-chat-assistant.git
+Step 1 — User Query  
+User asks a question in the chat interface.
+
+Step 2 — Query Embedding  
+The system converts the question into a vector embedding.
+
+Step 3 — Similarity Search  
+The query embedding is compared with stored document embeddings.
+
+Step 4 — Context Retrieval  
+Top relevant document chunks are retrieved.
+
+Step 5 — Prompt Construction  
+Retrieved context is combined with the user query.
+
+Step 6 — LLM Generation  
+The prompt is sent to the Gemini model.
+
+Step 7 — Response Delivery  
+The generated answer is returned to the frontend.
+
+---
+
+# 📦 Embedding Strategy
+
+Embeddings convert text into **numerical vectors representing semantic meaning**.
+
+Process used:
+
+1. Load documents from `docs.json`
+2. Convert document text into embeddings
+3. Store embeddings in `embeddings.json`
+4. Convert user queries into embeddings
+5. Compare query embeddings with stored embeddings
+
+Benefits:
+
+- Semantic search instead of keyword search  
+- Improved retrieval accuracy  
+- Reduced API usage through embedding caching  
+
+---
+
+# 🔎 Similarity Search
+
+The system uses **Cosine Similarity**.
+
+Formula:
+
+similarity = cosine(query_vector, document_vector)
+
+Process:
+
+1. Generate embedding for user query  
+2. Compare with stored embeddings  
+3. Rank documents by similarity score  
+4. Select top relevant results  
+5. Send them as context to the LLM  
+
+This allows retrieval of **semantically related information even when keywords differ**.
+
+---
+
+# 🧾 Prompt Design
+
+Prompt design ensures the model uses retrieved knowledge.
+
+Prompt structure:
+
+You are an AI assistant.
+
+Use the following context to answer the question.
+
+Context:
+{retrieved_documents}
+
+Question:
+{user_query}
+
+Provide a clear and accurate answer.
+
+Goals:
+
+- Reduce hallucinations  
+- Ground responses in retrieved knowledge  
+- Improve answer accuracy  
+
+---
+
+# 🏗 Project Structure
+
+genai-chat-assistant
+
+app.py  
+docs.json  
+embeddings.json  
+requirements.txt  
+
+static/  
+ script.js  
+ styles.css  
+
+templates/  
+ index.html  
+
+.env (not uploaded)
+
+---
+
+# ⚙️ Installation
+
+Clone the repository
+
+git clone https://github.com/Parthu-M/Production-Grade-GenAI-Assistant-with-RAG.git
+
 cd genai-chat-assistant
-```
 
----
+Create virtual environment
 
-### 2️⃣ Create a virtual environment
-
-```
 python -m venv .venv
-```
 
-Activate it:
+Activate environment
 
-**Windows**
+Windows
 
-```
 .venv\Scripts\activate
-```
 
-**Mac/Linux**
+Mac/Linux
 
-```
 source .venv/bin/activate
-```
 
----
+Install dependencies
 
-### 3️⃣ Install dependencies
-
-```
 pip install -r requirements.txt
-```
 
----
+Add API key
 
-### 4️⃣ Add API Key
-
-Create a `.env` file in the root directory:
-
-```
 GOOGLE_API_KEY=your_gemini_api_key_here
-```
 
-You can get an API key from:
+Run the application
 
-https://aistudio.google.com/app/apikey
-
----
-
-### 5️⃣ Run the application
-
-```
 python app.py
-```
 
-Open your browser and go to:
+Open in browser
 
-```
 http://localhost:5000
-```
 
 ---
 
-## 🌐 Deployment
+# 📸 Screenshots
 
-This project can be deployed for free using:
+Add screenshots of the chatbot interface here.
 
-* Render
-* Railway
-* Fly.io
+Example sections:
 
-Recommended: **Render**
+### Chat Interface
 
-Steps:
+https://drive.google.com/file/d/1ucP_FT90wJjSUIdm7RyK71jf0x2HFfad/view?usp=drive_link
 
-1. Push the project to GitHub
-2. Connect the repo to Render
-3. Set environment variable `GOOGLE_API_KEY`
-4. Deploy the web service
+### AI Response Example
 
----
+https://drive.google.com/file/d/1yVX3_aLjbI7_Qnrer2kVEnCb73MOwxwp/view?usp=sharing
 
-## 🛠 Technologies Used
+https://drive.google.com/file/d/1X-LRVksnVyNoRwtOyqyZ-F34IT_vqhEk/view?usp=drive_link
 
-* Python
-* Flask
-* Google Gemini API
-* Vector Embeddings
-* Cosine Similarity Search
-* HTML
-* CSS
-* JavaScript
+# 🎥 Demo Video
+
+https://drive.google.com/file/d/11UBlM5wXYGWPIVS5RYQZl8R-mYj9akJO/view?usp=sharing
 
 ---
 
-## 📌 Example Use Cases
+# 🛠 Technologies Used
 
-* AI customer support assistants
-* Knowledge base search
-* FAQ automation
-* Internal company documentation search
-* Helpdesk AI tools
+Backend
+
+Python  
+Flask  
+Google Gemini API  
+
+AI Concepts
+
+Retrieval-Augmented Generation  
+Vector Embeddings  
+Cosine Similarity Search  
+
+Frontend
+
+HTML  
+CSS  
+JavaScript  
 
 ---
 
-## ⚠️ Notes
+# 📌 Example Use Cases
 
-* The Gemini free tier has **API rate limits**.
-* Embeddings are cached locally to reduce API usage.
-* Do not upload `.env` to GitHub.
+- AI customer support assistants  
+- Knowledge base search  
+- FAQ automation  
+- Internal documentation search  
+- Helpdesk AI tools  
 
 ---
 
-## 📄 License
+# ⚠️ Notes
 
-This project is open source and available under the MIT License.
+- Gemini free tier has API rate limits  
+- Embeddings are cached locally  
+- Never upload `.env` to GitHub  
+
+---
+
+# 👨‍💻 Author
+
+Parthu M  
