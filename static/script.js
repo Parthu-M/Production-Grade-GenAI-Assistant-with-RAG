@@ -1,73 +1,146 @@
-const input = document.getElementById("user-input")
-const sendBtn = document.getElementById("send-btn")
-const messages = document.getElementById("messages")
-const typing = document.getElementById("typing")
+const input = document.getElementById("user-input");
+const sendBtn = document.getElementById("send-btn");
+const messages = document.getElementById("messages");
+const typing = document.getElementById("typing");
 
-sendBtn.onclick = sendMessage
+let typingInterval = null;
+let dots = 0;
+
+/* =========================
+   EVENT LISTENERS
+========================= */
+
+sendBtn.addEventListener("click", sendMessage);
 
 input.addEventListener("keypress", function(e){
-if(e.key === "Enter"){
-sendMessage()
-}
-})
+    if(e.key === "Enter"){
+        sendMessage();
+    }
+});
+
+
+/* =========================
+   ADD MESSAGE
+========================= */
 
 function addMessage(text, type){
 
-let div = document.createElement("div")
+    const msg = document.createElement("div");
 
-div.classList.add("message")
-div.classList.add(type)
+    msg.classList.add("message", type);
 
-div.innerText = text
+    msg.textContent = text;
 
-messages.appendChild(div)
+    msg.style.opacity = "0";
+    msg.style.transform = "translateY(10px)";
 
-messages.scrollTop = messages.scrollHeight
+    messages.appendChild(msg);
 
+    setTimeout(()=>{
+        msg.style.transition = "all 0.25s ease";
+        msg.style.opacity = "1";
+        msg.style.transform = "translateY(0)";
+    },10);
+
+    scrollBottom();
 }
+
+
+/* =========================
+   SCROLL
+========================= */
+
+function scrollBottom(){
+    messages.scrollTop = messages.scrollHeight;
+}
+
+
+/* =========================
+   TYPING ANIMATION
+========================= */
+
+function startTyping(){
+
+    typing.classList.remove("hidden");
+
+    dots = 0;
+
+    typingInterval = setInterval(()=>{
+
+        dots = (dots + 1) % 4;
+
+        typing.textContent = "Assistant is typing" + ".".repeat(dots);
+
+    },400);
+}
+
+
+function stopTyping(){
+
+    clearInterval(typingInterval);
+
+    typingInterval = null;
+
+    typing.classList.add("hidden");
+
+    typing.textContent = "Assistant is typing";
+}
+
+
+/* =========================
+   SEND MESSAGE
+========================= */
 
 async function sendMessage(){
 
-let message = input.value.trim()
+    const text = input.value.trim();
 
-if(message === "") return
+    if(text === "") return;
 
-addMessage(message,"user")
+    addMessage(text,"user");
 
-input.value=""
+    input.value = "";
+    input.focus();
 
-typing.classList.remove("hidden")
+    startTyping();
 
-try{
+    sendBtn.disabled = true;
+    sendBtn.innerText = "Sending...";
 
-const response = await fetch("/api/chat",{
+    try{
 
-method:"POST",
+        const response = await fetch("/api/chat",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({message:text})
+        });
 
-headers:{
-"Content-Type":"application/json"
-},
+        const data = await response.json();
 
-body:JSON.stringify({
-message:message
-})
+        stopTyping();
 
-})
+        const reply =
+            data.reply ||
+            data.error ||
+            "Something went wrong.";
 
-const data = await response.json()
+        addMessage(reply,"bot");
 
-typing.classList.add("hidden")
+    }
+    catch(error){
 
-let reply = data.reply || data.error || "Something went wrong"
+        stopTyping();
 
-addMessage(reply,"bot")
+        addMessage("⚠️ Server error. Try again.","bot");
 
-}catch(err){
+    }
+    finally{
 
-typing.classList.add("hidden")
+        sendBtn.disabled = false;
+        sendBtn.innerText = "Send";
 
-addMessage("Server error. Please try again.","bot")
-
-}
+    }
 
 }
