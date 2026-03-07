@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Reset Password",
+    "content": "To reset your password, go to Settings, open the Security section, and select the Reset Password option. Follow the instructions to create a new password."
+  },
+  {
+    "title": "Create Account",
+    "content": "New users can create an account by clicking the Sign Up button on the homepage and providing a valid email address and password."
+  },
+  {
+    "title": "Delete Account",
+    "content": "Users can permanently delete their account by navigating to Settings, selecting the Account section, and choosing the Delete Account option."
+  },
+  {
+    "title": "Update Profile Information",
+    "content": "Users can edit their personal details such as name, bio, and other profile information from the Profile section in account settings."
+  },
+  {
+    "title": "Contact Customer Support",
+    "content": "If users need assistance, they can contact customer support by sending an email to support@company.com or submitting a request through the Help Center."
+  },
+  {
+    "title": "Change Email Address",
+    "content": "Users can update their registered email address from Settings under the Account section after confirming their password."
+  },
+  {
+    "title": "Enable Two-Factor Authentication",
+    "content": "For additional security, users can enable two-factor authentication by going to Settings, selecting Security, and activating the 2FA option."
+  },
+  {
+    "title": "Disable Two-Factor Authentication",
+    "content": "Users who want to turn off two-factor authentication can do so in Settings under the Security section after verifying their identity."
+  },
+  {
+    "title": "Manage Notification Preferences",
+    "content": "Users can control which email or in-app notifications they receive by adjusting their preferences in Settings under the Notifications section."
+  },
+  {
+    "title": "Upload Profile Picture",
+    "content": "Users can upload or change their profile picture by visiting the Profile section and selecting a new image from their device."
+  },
+  {
+    "title": "View Login Activity",
+    "content": "Users can review recent login attempts and device activity from Settings in the Security section under Login Activity."
+  },
+  {
+    "title": "Logout from All Devices",
+    "content": "If users want to end all active sessions, they can log out from every device by selecting the Logout from All Devices option in Settings under Security."
+  },
+  {
+    "title": "Change Password",
+    "content": "Users can update their password anytime by going to Settings, opening the Security section, and selecting Change Password."
+  },
+  {
+    "title": "Privacy Settings",
+    "content": "Users can manage profile visibility, data sharing permissions, and privacy preferences in the Privacy section of Settings."
+  },
+  {
+    "title": "Download Account Data",
+    "content": "Users can request and download a copy of their account data from Settings under the Privacy section by selecting Download Data."
+  }
+]
