@@ -141,65 +141,63 @@ Goals:
 
 ---
 
-# 🏗 Project Structure
+## ⚙️ Installation
 
-genai-chat-assistant
+Follow these steps to run the project locally.
 
-app.py  
-docs.json  
-embeddings.json  
-requirements.txt  
+### 1️⃣ Clone the Repository
 
-static/  
- script.js  
- styles.css  
-
-templates/  
- index.html  
-
-.env (not uploaded)
-
----
-
-# ⚙️ Installation
-
-Clone the repository
-
+```bash
 git clone https://github.com/Parthu-M/Production-Grade-GenAI-Assistant-with-RAG.git
-
 cd genai-chat-assistant
+```
 
-Create virtual environment
+### 2️⃣ Create a Virtual Environment
 
+```bash
 python -m venv .venv
+```
 
-Activate environment
+### 3️⃣ Activate the Virtual Environment
 
-Windows
+**Windows**
 
+```bash
 .venv\Scripts\activate
+```
 
-Mac/Linux
+**Mac / Linux**
 
+```bash
 source .venv/bin/activate
+```
 
-Install dependencies
+### 4️⃣ Install Dependencies
 
+```bash
 pip install -r requirements.txt
+```
 
-Add API key
+### 5️⃣ Add Your API Key
 
+Create a `.env` file in the project root and add:
+
+```env
 GOOGLE_API_KEY=your_gemini_api_key_here
+```
 
-Run the application
+### 6️⃣ Run the Application
 
+```bash
 python app.py
+```
 
-Open in browser
+### 7️⃣ Open in Browser
 
+```
 http://localhost:5000
+```
 
----
 
 # 📸 Screenshots
 
