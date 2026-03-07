@@ -203,13 +203,9 @@ http://localhost:5000
 
 # 📸 Screenshots
 
-Add screenshots of the chatbot interface here.
-
-Example sections:
-
 ### Chat Interface
 
-https://drive.google.com/file/d/1ucP_FT90wJjSUIdm7RyK71jf0x2HFfad/view?usp=drive_link
+screenshots/assistant1.png
 
 ### AI Response Example
 
