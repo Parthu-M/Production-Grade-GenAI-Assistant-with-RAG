@@ -205,13 +205,13 @@ http://localhost:5000
 
 ### Chat Interface
 
-screenshots/assistant1.png
+![Chat Interface](screenshots/interface.png)
 
 ### AI Response Example
 
-https://drive.google.com/file/d/1yVX3_aLjbI7_Qnrer2kVEnCb73MOwxwp/view?usp=sharing
+![AI Response](screenshots/assistant1.png)
 
-https://drive.google.com/file/d/1X-LRVksnVyNoRwtOyqyZ-F34IT_vqhEk/view?usp=drive_link
+![AI Response](screenshots/assistant2.png)
 
 # 🎥 Demo Video
 
