@@ -259,4 +259,10 @@ JavaScript
 
 # 👨‍💻 Author
 
-Parthu M  
+Parthu M 
+
+# 🤖 Production-Grade GenAI Assistant with RAG
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20App-green?style=for-the-badge)](https://production-grade-genai-assistant-with-rag-41a7.onrender.com/)
+
+An AI-powered chatbot using Retrieval-Augmented Generation (RAG) and Google Gemini.
