@@ -199,17 +199,11 @@ http://localhost:5000
 ```
 
 
-# 📸 Screenshots
+## 📸 Screenshots
 
-### Chat Interface
-
-![Chat Interface](screenshots/interface.png)
-
-### AI Response Example
-
-![AI Response](screenshots/assistant1.png)
-
-![AI Response](screenshots/assistant2.png)
+| Chat Interface | AI Response | Multi Query Example |
+|----------------|-------------|---------------------|
+| ![](screenshots/interface.png) | ![](screenshots/assistant1.png) | ![](screenshots/assistant2.png) |
 
 # 🎥 Demo Video
 
