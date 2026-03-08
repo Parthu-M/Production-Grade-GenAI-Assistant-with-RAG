@@ -217,25 +217,22 @@ https://drive.google.com/file/d/11UBlM5wXYGWPIVS5RYQZl8R-mYj9akJO/view?usp=shari
 
 ---
 
-# 🛠 Technologies Used
+## 🛠 Technologies Used
 
-Backend
+### 🧠 Backend
+- **Python**
+- **Flask**
+- **Google Gemini API**
 
-Python  
-Flask  
-Google Gemini API  
+### 🤖 AI Concepts
+- **Retrieval-Augmented Generation (RAG)**
+- **Vector Embeddings**
+- **Cosine Similarity Search**
 
-AI Concepts
-
-Retrieval-Augmented Generation  
-Vector Embeddings  
-Cosine Similarity Search  
-
-Frontend
-
-HTML  
-CSS  
-JavaScript  
+### 🎨 Frontend
+- **HTML**
+- **CSS**
+- **JavaScript**  
 
 ---
 
@@ -257,12 +254,12 @@ JavaScript
 
 ---
 
+# 🤖 Production-Grade GenAI Assistant with RAG
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-green?style=for-the-badge)](https://production-grade-genai-assistant-with-rag-41a7.onrender.com/)
+
+An AI-powered chatbot using Retrieval-Augmented Generation (RAG) and Google Gemini.
+
 # 👨‍💻 Author
 
 Parthu M 
-
-# 🤖 Production-Grade GenAI Assistant with RAG
-
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20App-green?style=for-the-badge)](https://production-grade-genai-assistant-with-rag-41a7.onrender.com/)
-
-An AI-powered chatbot using Retrieval-Augmented Generation (RAG) and Google Gemini.
