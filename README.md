@@ -84,9 +84,9 @@ Good questions to try:
 
 ## Screenshots
 
-| Chat interface | Grounded answer | Additional query |
+| Knowledge-scope interface | Grounded answer | Out-of-scope refusal |
 | --- | --- | --- |
-| ![GenAI Assistant chat interface](screenshots/interface.png) | ![Assistant answering a knowledge-base question](screenshots/assistant1.png) | ![Assistant responding to another supported question](screenshots/assistant2.png) |
+| ![GenAI Assistant showing its supported knowledge scope](screenshots/interface.png) | ![Assistant answering a supported account-creation question](screenshots/assistant1.png) | ![Assistant refusing a question that is not covered by the knowledge base](screenshots/assistant2.png) |
 
 ## Technology stack
 
