@@ -1,259 +1,240 @@
-# GenAI RAG Chat Assistant 🤖
+# Production-Grade GenAI Assistant with RAG
 
-An AI-powered chatbot built using **Retrieval-Augmented Generation (RAG)** and the **Google Gemini API**.
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_App-16a34a?style=for-the-badge)](https://production-grade-genai-assistant-with-rag-41a7.onrender.com/)
+[![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-REST_API-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![Google Gemini](https://img.shields.io/badge/Google_Gemini-RAG-8E75B2?logo=googlegemini&logoColor=white)](https://ai.google.dev/)
 
-The system retrieves relevant knowledge using **semantic search and embeddings** and generates responses using a **Large Language Model (LLM)**.
+A production-oriented, closed-book customer-support assistant that combines semantic retrieval with Google Gemini to generate answers grounded in a controlled knowledge base.
 
----
+The project demonstrates the complete RAG lifecycle: document ingestion, chunking, task-specific embeddings, similarity search, prompt grounding, refusal behavior, a Flask API, and a responsive chat interface.
 
-## 🚀 Features
+**[Try the live application](https://production-grade-genai-assistant-with-rag-41a7.onrender.com/)**
 
-- AI-powered question answering  
-- Retrieval-Augmented Generation (RAG)  
-- Semantic search using embeddings  
-- Knowledge base stored in JSON documents  
-- Fast similarity search using cosine similarity  
-- Interactive chat interface  
-- Flask backend  
-- HTML, CSS, JavaScript frontend  
-- Environment variables for API keys  
+## Why this project matters
 
----
+General-purpose language models can produce fluent answers even when the required facts are missing. This project reduces that risk by retrieving relevant information from a local knowledge base before generation and explicitly instructing the model to refuse unsupported questions.
 
-# 🏗 Architecture
+### Engineering highlights
 
-System architecture flow:
+- **End-to-end RAG pipeline:** ingestion, chunking, embeddings, retrieval, context construction, and generation.
+- **Task-aware embeddings:** documents use `RETRIEVAL_DOCUMENT`; user questions use `RETRIEVAL_QUERY`.
+- **Bounded context:** cosine similarity ranks the corpus and sends only the top three chunks to the model.
+- **Closed-book behavior:** Gemini is instructed to answer only from retrieved context and return a fallback when evidence is missing.
+- **Embedding cache:** document vectors are written to `embeddings.json` and reused after the first run.
+- **API-first design:** a JSON endpoint separates the retrieval/generation backend from the browser client.
+- **Deployment-aware configuration:** secrets come from environment variables, and the server reads Render's dynamic `PORT`.
+- **Responsive user experience:** message states, keyboard submission, loading feedback, error handling, and mobile styling.
 
-User  
-↓  
-Web Interface (HTML / CSS / JS)  
-↓  
-Flask Backend API  
-↓  
-Query Embedding Generation  
-↓  
-Vector Similarity Search  
-↓  
-Retrieve Relevant Documents  
-↓  
-Prompt Construction  
-↓  
-Gemini LLM  
-↓  
-Generated Response  
-↓  
-Return Response to User
+## Architecture
 
-This architecture ensures responses are generated using **retrieved knowledge instead of relying only on model training data**.
+```mermaid
+flowchart LR
+    U["User"] --> UI["HTML / CSS / JavaScript chat UI"]
+    UI -->|POST /api/chat| API["Flask API"]
+    API --> QE["Gemini embedding<br/>RETRIEVAL_QUERY"]
 
----
+    KB["docs.json"] --> CH["300-word chunking"]
+    CH --> DE["Gemini embedding<br/>RETRIEVAL_DOCUMENT"]
+    DE --> CACHE["embeddings.json cache"]
 
-# 🧠 RAG Workflow
+    QE --> SEARCH["Cosine similarity<br/>top-k = 3"]
+    CACHE --> SEARCH
+    SEARCH --> PROMPT["Grounded prompt<br/>context + question"]
+    PROMPT --> LLM["Gemini 2.5 Flash"]
+    LLM --> API
+    API --> UI
+```
 
-The chatbot follows a **Retrieval-Augmented Generation pipeline**.
+### Request lifecycle
 
-Step 1 — User Query  
-User asks a question in the chat interface.
+1. On the first startup, the application loads `docs.json`, splits each document into chunks, creates document embeddings, and stores them locally.
+2. A user submits a question through the browser.
+3. Flask creates a query embedding with `gemini-embedding-001`.
+4. The application compares the query vector with cached document vectors using cosine similarity.
+5. The three highest-ranked chunks are combined into a compact context.
+6. Gemini 2.5 Flash receives the context, the question, and a strict grounding instruction.
+7. The API returns the generated reply and the number of retrieved chunks to the client.
 
-Step 2 — Query Embedding  
-The system converts the question into a vector embedding.
+## Demo knowledge boundary
 
-Step 3 — Similarity Search  
-The query embedding is compared with stored document embeddings.
+> **Important:** This is intentionally a closed-book demo. Please ask only about subjects covered by [`docs.json`](docs.json). If the retrieved context does not contain the answer, the assistant is instructed to respond: **"I don't have enough information."**
 
-Step 4 — Context Retrieval  
-Top relevant document chunks are retrieved.
+The current knowledge base covers:
 
-Step 5 — Prompt Construction  
-Retrieved context is combined with the user query.
+- Creating or permanently deleting an account
+- Resetting or changing a password
+- Changing the registered email address
+- Updating profile information or a profile picture
+- Enabling or disabling two-factor authentication
+- Reviewing login activity or logging out from all devices
+- Managing notification preferences
+- Managing privacy and data-sharing settings
+- Downloading account data
+- Contacting customer support
 
-Step 6 — LLM Generation  
-The prompt is sent to the Gemini model.
+Good questions to try:
 
-Step 7 — Response Delivery  
-The generated answer is returned to the frontend.
+- How do I reset my password?
+- Where can I enable two-factor authentication?
+- How do I review recent login activity?
+- Can I log out from every device?
+- Where can I download my account data?
+- How can I contact customer support?
 
----
+## Screenshots
 
-# 📦 Embedding Strategy
+| Chat interface | Grounded answer | Additional query |
+| --- | --- | --- |
+| ![GenAI Assistant chat interface](screenshots/interface.png) | ![Assistant answering a knowledge-base question](screenshots/assistant1.png) | ![Assistant responding to another supported question](screenshots/assistant2.png) |
 
-Embeddings convert text into **numerical vectors representing semantic meaning**.
+## Technology stack
 
-Process used:
+| Layer | Technology | Responsibility |
+| --- | --- | --- |
+| Generation | Gemini 2.5 Flash | Produces a concise answer from retrieved context |
+| Embeddings | `gemini-embedding-001` | Creates document and query vectors |
+| Retrieval | NumPy + scikit-learn | Ranks chunks with cosine similarity |
+| Backend | Python + Flask | Serves the UI and `/api/chat` endpoint |
+| Knowledge store | JSON | Keeps the demo corpus readable and version-controlled |
+| Cache | Local JSON | Avoids regenerating document embeddings on every startup |
+| Frontend | HTML + CSS + JavaScript | Provides the responsive chat experience |
+| Configuration | `python-dotenv` | Loads the Gemini API key locally |
+| Hosting | Render-compatible runtime | Uses the platform-provided port |
 
-1. Load documents from `docs.json`
-2. Convert document text into embeddings
-3. Store embeddings in `embeddings.json`
-4. Convert user queries into embeddings
-5. Compare query embeddings with stored embeddings
+## Run locally
 
-Benefits:
+### Prerequisites
 
-- Semantic search instead of keyword search  
-- Improved retrieval accuracy  
-- Reduced API usage through embedding caching  
+- Python 3
+- A [Google AI Studio API key](https://aistudio.google.com/app/apikey)
 
----
-
-# 🔎 Similarity Search
-
-The system uses **Cosine Similarity**.
-
-Formula:
-
-similarity = cosine(query_vector, document_vector)
-
-Process:
-
-1. Generate embedding for user query  
-2. Compare with stored embeddings  
-3. Rank documents by similarity score  
-4. Select top relevant results  
-5. Send them as context to the LLM  
-
-This allows retrieval of **semantically related information even when keywords differ**.
-
----
-
-# 🧾 Prompt Design
-
-Prompt design ensures the model uses retrieved knowledge.
-
-Prompt structure:
-
-You are an AI assistant.
-
-Use the following context to answer the question.
-
-Context:
-{retrieved_documents}
-
-Question:
-{user_query}
-
-Provide a clear and accurate answer.
-
-Goals:
-
-- Reduce hallucinations  
-- Ground responses in retrieved knowledge  
-- Improve answer accuracy  
-
----
-
-## ⚙️ Installation
-
-Follow these steps to run the project locally.
-
-### 1️⃣ Clone the Repository
+### Setup
 
 ```bash
 git clone https://github.com/Parthu-M/Production-Grade-GenAI-Assistant-with-RAG.git
-cd genai-chat-assistant
-```
+cd Production-Grade-GenAI-Assistant-with-RAG
 
-### 2️⃣ Create a Virtual Environment
-
-```bash
 python -m venv .venv
 ```
 
-### 3️⃣ Activate the Virtual Environment
+Activate the environment:
 
-**Windows**
-
-```bash
-.venv\Scripts\activate
+```powershell
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
 ```
 
-**Mac / Linux**
-
 ```bash
+# macOS / Linux
 source .venv/bin/activate
 ```
 
-### 4️⃣ Install Dependencies
+Install dependencies:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-### 5️⃣ Add Your API Key
-
-Create a `.env` file in the project root and add:
+Create a `.env` file in the repository root:
 
 ```env
-GOOGLE_API_KEY=your_gemini_api_key_here
+GOOGLE_API_KEY=your_gemini_api_key
 ```
 
-### 6️⃣ Run the Application
+Start the application:
 
 ```bash
 python app.py
 ```
 
-### 7️⃣ Open in Browser
+Open [http://localhost:10000](http://localhost:10000). The first startup can take longer because the application creates and caches the knowledge-base embeddings.
 
+## API contract
+
+### `POST /api/chat`
+
+Request:
+
+```json
+{
+  "message": "How do I enable two-factor authentication?"
+}
 ```
-http://localhost:5000
+
+Successful response:
+
+```json
+{
+  "reply": "For additional security, go to Settings, select Security, and activate the 2FA option.",
+  "retrievedChunks": 3
+}
 ```
 
+Validation error:
 
-## 📸 Screenshots
+```json
+{
+  "error": "Message required"
+}
+```
 
-| Chat Interface | AI Response | Multi Query Example |
-|----------------|-------------|---------------------|
-| ![](screenshots/interface.png) | ![](screenshots/assistant1.png) | ![](screenshots/assistant2.png) |
+Example request:
 
-# 🎥 Demo Video
+```bash
+curl -X POST http://localhost:10000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"How do I reset my password?"}'
+```
 
-https://drive.google.com/file/d/11UBlM5wXYGWPIVS5RYQZl8R-mYj9akJO/view?usp=sharing
+## Project structure
 
----
+```text
+.
+|-- app.py                 # Ingestion, retrieval, generation, and Flask routes
+|-- docs.json              # Version-controlled support knowledge base
+|-- requirements.txt       # Python dependencies
+|-- templates/
+|   `-- index.html         # Chat page
+|-- static/
+|   |-- script.js          # Client-side chat behavior and API calls
+|   `-- styles.css         # Responsive interface styling
+`-- screenshots/           # README product previews
+```
 
-## 🛠 Technologies Used
+`embeddings.json` is generated at runtime and intentionally excluded from Git.
 
-### 🧠 Backend
-- **Python**
-- **Flask**
-- **Google Gemini API**
+## Updating the knowledge base
 
-### 🤖 AI Concepts
-- **Retrieval-Augmented Generation (RAG)**
-- **Vector Embeddings**
-- **Cosine Similarity Search**
+Add entries to `docs.json` using the existing structure:
 
-### 🎨 Frontend
-- **HTML**
-- **CSS**
-- **JavaScript**  
+```json
+{
+  "title": "Article title",
+  "content": "The factual content available to the assistant."
+}
+```
 
----
+The current cache is not automatically invalidated when `docs.json` changes. After editing the corpus:
 
-# 📌 Example Use Cases
+1. Delete the generated `embeddings.json` file.
+2. Restart the application.
+3. The application will regenerate embeddings for the updated knowledge base.
 
-- AI customer support assistants  
-- Knowledge base search  
-- FAQ automation  
-- Internal documentation search  
-- Helpdesk AI tools  
+## Current safeguards and trade-offs
 
----
+| Area | Current implementation | Production hardening opportunity |
+| --- | --- | --- |
+| Grounding | Prompt instructs the model to use only retrieved context | Add a similarity threshold and deterministic refusal before generation |
+| Retrieval | In-memory cosine search over top three fixed-size chunks | Add metadata filters, reranking, and a managed vector database |
+| Explainability | Grounded context is supplied to the model | Return document titles, citations, and retrieval scores |
+| Evaluation | Behavior can be checked with the included support questions | Add a versioned evaluation set for retrieval recall, faithfulness, and latency |
+| Operations | Environment-based secrets and cached embeddings | Add structured logs, tracing, metrics, retries, and health checks |
+| Security | API key remains server-side | Add authentication, rate limiting, input limits, and abuse controls |
+| Serving | Flask application with platform port support | Use a production WSGI server, containerization, and CI/CD |
 
-# ⚠️ Notes
+These boundaries are documented deliberately: the repository is an end-to-end RAG implementation and a clear foundation for production hardening, not a claim that every enterprise control is already present.
 
-- Gemini free tier has API rate limits  
-- Embeddings are cached locally  
-- Never upload `.env` to GitHub  
+## Author
 
----
-
-# 🤖 Production-Grade GenAI Assistant with RAG
-
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-green?style=for-the-badge)](https://production-grade-genai-assistant-with-rag-41a7.onrender.com/)
-
-An AI-powered chatbot using Retrieval-Augmented Generation (RAG) and Google Gemini.
-
-# 👨‍💻 Author
-
-Parthu M 
+**Parthu M** — [GitHub profile](https://github.com/Parthu-M)

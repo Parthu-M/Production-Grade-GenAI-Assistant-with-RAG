@@ -1,5 +1,9 @@
 [
   {
+    "title": "Demo Knowledge Base Scope",
+    "content": "This is a closed-book customer-support demo. The assistant should answer only from this knowledge base, which covers account creation and deletion, password reset and changes, email changes, profile updates and profile pictures, two-factor authentication, notification preferences, login activity, logging out from all devices, privacy settings, downloading account data, and contacting customer support. If the requested information is not covered, the assistant should say that it does not have enough information."
+  },
+  {
     "title": "Reset Password",
     "content": "To reset your password, go to Settings, open the Security section, and select the Reset Password option. Follow the instructions to create a new password."
   },
